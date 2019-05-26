@@ -6,6 +6,7 @@ class Universe:
         self.x_size = x_size
         self.y_size = y_size
         self.seed = [[]*x_size]*y_size
+        self.iterations = 0
 
     def fate(self, cell, current_universe):
         #Adding manual Padding
@@ -53,13 +54,15 @@ class Universe:
         current_universe = self.seed
         def update(cell, current_universe): return self.fate(
             cell, current_universe)
-        self.seed = [[update(current_universe[row][cell], current_universe)
+        self.seed = [[Cell(cell, row, update(current_universe[row][cell], current_universe))
                       for cell in range(self.x_size)]
                      for row in range(self.y_size)]
-
+        self.iterations+=1
+        visualize_universe(self.seed, self.iterations)
 
     def start(self):
         def generate(x, y): return Cell(x, y, False)
         self.seed = [[generate(cell, row)
                       for cell in range(self.x_size)]
                      for row in range(self.y_size)]
+        visualize_universe(self.seed, self.iterations)

@@ -1,3 +1,5 @@
-def visualize_universe(universe_state):
+def visualize_universe(universe_state, iteration):
+    print("\n=========ITER {}=========".format(iteration))
     for row in universe_state:
-        print(row)
+        print([cell.state for cell in row])
+    print("========================")
