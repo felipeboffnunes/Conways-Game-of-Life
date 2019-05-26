@@ -21,7 +21,7 @@ class Universe:
         print(neighbours_alive)
 
         def rule_1():
-            if neighbours_alive > 2:
+            if neighbours_alive < 2:
                 return False
 
         def rule_2():
