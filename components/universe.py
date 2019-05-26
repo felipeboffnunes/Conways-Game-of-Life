@@ -9,9 +9,9 @@ class Universe:
 
     def fate(self, cell, current_universe):
 
-        current_universe = [[Cell(0, 0, False)]*(self.x_size +2)] + \
-            [[Cell(0,0,False)] + current_universe[row] + [Cell(0,0,False)] for row in range(self.y_size)] + \
-            [[Cell(0,0,False)]*(self.x_size+2)]
+        current_universe = [[Cell(-1, -1, False)]*(self.x_size +2)] + \
+            [[Cell(-1,-1,False)] + current_universe[row] + [Cell(-1,-1,False)] for row in range(self.y_size)] + \
+            [[Cell(-1,-1,False)]*(self.x_size+2)]
 
         neighbours = current_universe[cell.x + 1][cell.y + 1], \
             current_universe[cell.x + 1][cell.y + 1], \
@@ -39,13 +39,15 @@ class Universe:
         def rule_4():
             if neighbours_alive == 3:
                 return True
-
-        if cell.state:
-            cell.state = rule_1() or rule_2() or rule_3()
-        else:
-            cell.state = rule_4()
+                
         new_state = False
+        if cell.state:
+            new_state = rule_1() or rule_2() or rule_3()
+        else:
+            new_state = rule_4()
+
         return new_state
+
 
     def iterate(self):
         current_universe = self.seed
