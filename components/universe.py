@@ -8,6 +8,11 @@ class Universe:
         self.seed = [[]*x_size]*y_size
 
     def fate(self, cell, current_universe):
+
+        current_universe = [[Cell(0, 0, False)]*(self.x_size +2)] + \
+            [[Cell(0,0,False)] + current_universe[row] + [Cell(0,0,False)] for row in range(self.y_size)] + \
+            [[Cell(0,0,False)]*(self.x_size+2)]
+
         neighbours = current_universe[cell.x + 1][cell.y + 1], \
             current_universe[cell.x + 1][cell.y + 1], \
             current_universe[cell.x][cell.y + 1], \
@@ -18,7 +23,6 @@ class Universe:
             current_universe[cell.x - 1][cell.y - 1]
 
         neighbours_alive = [cell.state for cells in neighbours]
-        print(neighbours_alive)
 
         def rule_1():
             if neighbours_alive < 2:
@@ -50,11 +54,9 @@ class Universe:
         self.seed = [[update(current_universe[row][cell], current_universe)
                       for cell in range(self.x_size)]
                      for row in range(self.y_size)]
-        print(self.seed)
 
     def start(self):
         def generate(x, y): return Cell(x, y, False)
         self.seed = [[generate(cell, row)
                       for cell in range(self.x_size)]
                      for row in range(self.y_size)]
-        print(self.seed)
