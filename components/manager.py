@@ -7,5 +7,5 @@ class Manager:
 
     def manage(self):
         u = Universe(self.size, self.size)
-        u.start()
-        for _ in self.iterate_for: u.iterate()
+        #u.start()
+        for _ in range(self.iterate_for): u.iterate()
