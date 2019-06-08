@@ -1,5 +1,29 @@
+import matplotlib.pyplot as plt
+import numpy as np
+STATES = []
+
 def visualize_universe(universe_state, iteration):
+    universe = []
+    
     print("\n=========ITER {}=========".format(iteration))
     for row in universe_state:
-        print([cell.state for cell in row])
+        aux_row = []
+        for cell in row:
+
+            if cell.state:
+                aux_row.append(1)
+            else:
+                aux_row.append(0)
+        universe.append(aux_row)
+    
+    universe = np.matrix(universe)
+    print(universe)
     print("========================")
+    STATES.append(universe)
+    if iteration == 9:
+        plot_states()
+  
+def plot_states():
+    for state in STATES:
+        plt.imshow(state, cmap='gray')
+        plt.show()
