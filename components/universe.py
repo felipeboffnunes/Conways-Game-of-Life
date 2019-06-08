@@ -1,27 +1,36 @@
 from .cell import Cell
 from .visualizer import visualize_universe
+from oscillators.blinker import blinker
+
 
 class Universe:
     def __init__(self, x_size: int, y_size: int):
         self.x_size = x_size
         self.y_size = y_size
-        self.seed = [[]*x_size]*y_size
+        self.seed = blinker()
+        self.iterations = 0
 
     def fate(self, cell, current_universe):
-        #Adding manual Padding
-        current_universe = [[Cell(-1, -1, False)]*(self.x_size +2)] + \
-            [[Cell(-1,-1,False)] + current_universe[row] + [Cell(-1,-1,False)] for row in range(self.y_size)] + \
-            [[Cell(-1,-1,False)]*(self.x_size+2)]
-        #Checking neighbours
-        neighbours = current_universe[cell.x + 1][cell.y + 1], \
-            current_universe[cell.x + 1][cell.y + 1], \
-            current_universe[cell.x][cell.y + 1], \
-            current_universe[cell.x - 1][cell.y + 1], \
-            current_universe[cell.x + 1][cell.y], \
-            current_universe[cell.x + 1][cell.y - 1], \
-            current_universe[cell.x - 1][cell.y], \
-            current_universe[cell.x - 1][cell.y - 1]
-        neighbours_alive = sum([cell.state for cells in neighbours])
+        # Adding manual Padding
+        padded_universe = [[Cell(-1, -1, False)]*(self.x_size + 2)] + \
+            [[Cell(-1, -1, False)] + current_universe[row] + [Cell(-1, -1, False)] for row in range(self.y_size)] + \
+            [[Cell(-1, -1, False)]*(self.x_size+2)]
+
+        new_x = cell.x + 1
+        new_y = cell.y + 1
+        
+        # Checking neighbours
+        neighbours = padded_universe[new_y + 1][new_x + 1], \
+            padded_universe[new_y][new_x + 1], \
+            padded_universe[new_y - 1][new_x + 1], \
+            padded_universe[new_y + 1][new_x], \
+            padded_universe[new_y-1][new_x], \
+            padded_universe[new_y + 1][new_x - 1], \
+            padded_universe[new_y][new_x - 1], \
+            padded_universe[new_y - 1][new_x - 1]
+
+        neighbours_alive = sum(int(cell.state) for cell in neighbours)
+
 
         def rule_1():
             if neighbours_alive < 2:
@@ -46,20 +55,26 @@ class Universe:
         else:
             new_state = rule_4()
 
+        if new_state == None:
+            new_state = False
+        
         return new_state
-
 
     def iterate(self):
         current_universe = self.seed
+        visualize_universe(current_universe, self.iterations)
         def update(cell, current_universe): return self.fate(
             cell, current_universe)
-        self.seed = [[update(current_universe[row][cell], current_universe)
-                      for cell in range(self.x_size)]
-                     for row in range(self.y_size)]
-
+        aux = [[Cell(cell, row, update(current_universe[row][cell], current_universe))
+                for cell in range(self.x_size)]
+               for row in range(self.y_size)]
+        self.iterations += 1
+        visualize_universe(aux, self.iterations)
+        self.seed = aux
 
     def start(self):
         def generate(x, y): return Cell(x, y, False)
         self.seed = [[generate(cell, row)
                       for cell in range(self.x_size)]
                      for row in range(self.y_size)]
+        visualize_universe(self.seed, self.iterations)
