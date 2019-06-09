@@ -1,13 +1,12 @@
 from .cell import Cell
 from .visualizer import visualize_universe
-from oscillators.blinker import blinker
 
 
 class Universe:
-    def __init__(self, x_size: int, y_size: int):
+    def __init__(self, x_size: int, y_size: int, seed):
         self.x_size = x_size
         self.y_size = y_size
-        self.seed = blinker()
+        self.seed = seed
         self.iterations = 0
 
     def fate(self, cell, current_universe):
