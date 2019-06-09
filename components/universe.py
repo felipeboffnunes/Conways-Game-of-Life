@@ -1,7 +1,6 @@
 from .cell import Cell
 from .visualizer import visualize_universe
 
-
 class Universe:
     def __init__(self, x_size: int, y_size: int, seed):
         self.x_size = x_size
@@ -68,8 +67,8 @@ class Universe:
                 for cell in range(self.x_size)]
                for row in range(self.y_size)]
         self.iterations += 1
-        visualize_universe(aux, self.iterations)
         self.seed = aux
+
 
     def start(self):
         def generate(x, y): return Cell(x, y, False)

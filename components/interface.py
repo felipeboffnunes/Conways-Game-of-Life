@@ -12,6 +12,7 @@ from kivy.core.window import Window
 # COMPONENTS
 from .seed_generator import create_seed
 from .universe import Universe
+from .visualizer import plot_states
 
 
 class GameInterface(App):
@@ -83,6 +84,7 @@ class GameInterface(App):
                              seed=seed)
                 for _ in range(int(simulation_time.text)):
                     u.iterate()
+                plot_states()
 
             run_simulation_button = Button(
                 text='Run Game of Life', size_hint=(1, .12))
