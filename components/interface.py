@@ -9,6 +9,9 @@ from kivy.uix.button import Button
 from kivy.uix.checkbox import CheckBox
 # CORE
 from kivy.core.window import Window
+# COMPONENTS
+from .seed_generator import create_seed
+from .universe import Universe
 
 
 class GameInterface(App):
@@ -40,17 +43,17 @@ class GameInterface(App):
             for row, y in enumerate(range(int(environment_axis_x.text))):
                 row = BoxLayout()
                 for i in range(int(environment_axis_y.text)):
-                    i = int(environment_axis_x.text) * y + i
                     c = CheckBox(id=str(i))
                     row.add_widget(c)
                 rows.add_widget(row)
             layout.add_widget(rows)
             # Remove last config
             layout.remove_widget(layout_axis_x)
+
             layout.remove_widget(layout_axis_y)
             layout.remove_widget(create_grid_button)
             # Add new config
-            layout_simulation = BoxLayout(size_hint=(1,.1))
+            layout_simulation = BoxLayout(size_hint=(1, .1))
             label_simulation = Label(text='Simulation time')
             simulation_time = TextInput(text='10')
             layout_simulation.add_widget(label_simulation)
@@ -58,22 +61,36 @@ class GameInterface(App):
             layout.add_widget(layout_simulation)
 
             def run_simulation(instance):
-                #layout.children[2] is the simulation
-                #layout.children[2].children are the y rows
-                #each y row has x checkboxes
+                # CREATE SEED
+                # layout.children[2] is the simulation
+                # layout.children[2].children are the y rows
+                # each y row has x checkboxes
+                simulation_id = []
+                simulation_status = []
                 for i, _ in enumerate(layout.children[2].children):
-                    cell_id = [checkbox.id for checkbox in layout.children[2].children[i].children]
-                    cell_status = [checkbox.active for checkbox in layout.children[2].children[i].children]
-                    print(cell_id, cell_status)
-                
+                    cell_id = [
+                        checkbox.id for checkbox in layout.children[2].children[i].children]
+                    cell_status = [
+                        checkbox.active for checkbox in layout.children[2].children[i].children]
+                    simulation_id.append(cell_id)
+                    simulation_status.append(cell_status)
+            
+                seed = create_seed(simulation_id, simulation_status)
 
-            run_simulation_button = Button(text='Run Game of Life', size_hint=(1,.1))
+                # RUN
+                u = Universe(int(environment_axis_x.text),
+                             int(environment_axis_y.text),
+                             seed=seed)
+                for _ in range(int(simulation_time.text)):
+                    u.iterate()
+
+            run_simulation_button = Button(
+                text='Run Game of Life', size_hint=(1, .12))
             run_simulation_button.bind(on_press=run_simulation)
             layout.add_widget(run_simulation_button)
             Window.size = (int(environment_axis_x.text)*12 + 200,
                            int(environment_axis_y.text)*30 + 200)
 
-            
         create_grid_button = Button(text='Create Environment')
         create_grid_button.bind(on_press=create_grid)
 
