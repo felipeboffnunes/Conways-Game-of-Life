@@ -20,10 +20,10 @@ def visualize_universe(universe_state, iteration):
     print(universe)
     print("========================")
     STATES.append(universe)
-    if iteration == 9:
-        plot_states()
   
 def plot_states():
+    global STATES
     for state in STATES:
         plt.imshow(state, cmap='gray')
         plt.show()
+    STATES = []
