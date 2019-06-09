@@ -1,5 +1,5 @@
-from .universe import Universe
-from .interface import GameInterface
+from components.logic.universe import Universe
+from components.tools.interface import GameInterface
 
 class Manager:
     def __init__(self):

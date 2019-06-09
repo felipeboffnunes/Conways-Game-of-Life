@@ -1,5 +1,5 @@
 from .cell import Cell
-from .visualizer import visualize_universe
+from components.tools.visualizer import visualize_universe
 
 class Universe:
     def __init__(self, x_size: int, y_size: int, seed):

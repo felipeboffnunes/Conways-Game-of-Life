@@ -1,5 +1,4 @@
-from components.cell import Cell
-
+from components.logic.cell import Cell
 
 def create_seed(id, simulation_status):
     seed = []
