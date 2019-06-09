@@ -10,8 +10,8 @@ from kivy.uix.checkbox import CheckBox
 # CORE
 from kivy.core.window import Window
 # COMPONENTS
-from .seed_generator import create_seed
-from .universe import Universe
+from components.config.raw_python_seed_generator import create_seed
+from components.logic.universe import Universe
 from .visualizer import plot_states
 
 
